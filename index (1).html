@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="registrationApp">
+<head>
+  <meta charset="UTF-8">
+  <title>AngularJS Registration Form</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    .error { color: red; font-size: 14px; }
+    .form-group { margin-bottom: 10px; }
+    .submitted-data { margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+  </style>
+</head>
+<body ng-controller="RegistrationController">
+
+  <h2>User Registration Form</h2>
+  
+  <form name="registrationForm" ng-submit="submitForm()" novalidate>
+    
+    <!-- Name -->
+    <div class="form-group">
+      <label>Name:</label><br>
+      <input type="text" name="name" ng-model="user.name" required />
+      <div class="error" ng-show="registrationForm.name.$touched && registrationForm.name.$invalid">
+        Name is required.
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email:</label><br>
+      <input type="email" name="email" ng-model="user.email" required />
+      <div class="error" ng-show="registrationForm.email.$touched && registrationForm.email.$invalid">
+        Valid email is required.
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label>Password:</label><br>
+      <input type="password" name="password" ng-model="user.password" required ng-minlength="6" />
+      <div class="error" ng-show="registrationForm.password.$touched && registrationForm.password.$invalid">
+        Password is required (min 6 characters).
+      </div>
+    </div>
+
+    <!-- Gender -->
+    <div class="form-group">
+      <label>Gender:</label><br>
+      <label><input type="radio" ng-model="user.gender" value="Male" required /> Male</label>
+      <label><input type="radio" ng-model="user.gender" value="Female" required /> Female</label>
+      <div class="error" ng-show="registrationForm.$submitted && !user.gender">
+        Please select gender.
+      </div>
+    </div>
+
+    <!-- Terms and Conditions -->
+    <div class="form-group">
+      <label><input type="checkbox" ng-model="user.agree" required /> I agree to the terms and conditions</label>
+      <div class="error" ng-show="registrationForm.$submitted && !user.agree">
+        You must agree before submitting.
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Display submitted data -->
+  <div class="submitted-data" ng-if="submitted">
+    <h3>Submitted Data</h3>
+    <p><strong>Name:</strong> {{user.name}}</p>
+    <p><strong>Email:</strong> {{user.email}}</p>
+    <p><strong>Gender:</strong> {{user.gender}}</p>
+    <p><strong>Agreed to Terms:</strong> {{user.agree ? 'Yes' : 'No'}}</p>
+  </div>
+
+  <script>
+    angular.module('registrationApp', [])
+      .controller('RegistrationController', function($scope) {
+        $scope.user = {};
+        $scope.submitted = false;
+
+        $scope.submitForm = function() {
+          if ($scope.registrationForm.$valid && $scope.user.gender && $scope.user.agree) {
+            $scope.submitted = true;
+          } else {
+            $scope.submitted = false;
+          }
+        };
+      });
+  </script>
+
+</body>
+</html>
